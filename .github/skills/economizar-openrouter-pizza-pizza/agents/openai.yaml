@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenRouter — Economia Pizza Pizza"
+  short_description: "Rascunhos econômicos com medição de custo real"
+  default_prompt: "Use $economizar-openrouter-pizza-pizza para preparar respostas às avaliações usando OpenRouter com controle de custo."

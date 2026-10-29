@@ -1,0 +1,35 @@
+name: Validar OpenRouter
+on:
+  workflow_dispatch:
+    inputs:
+      paid_test:
+        description: 'Executar uma geração sintética paga (verificação prévia US$ 0,01; requer chave com limite de créditos)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Obter integração pública
+        env:
+          REPOSITORY_URL: https://github.com/${{ github.repository }}.git
+        run: git clone --depth 1 "$REPOSITORY_URL" repo
+      - name: Testes locais
+        run: python3 repo/.github/skills/economizar-openrouter-pizza-pizza/scripts/test_router.py
+      - name: Catálogo e simulação sem geração paga
+        run: |
+          python3 repo/.github/skills/economizar-openrouter-pizza-pizza/scripts/router.py models
+          python3 repo/.github/skills/economizar-openrouter-pizza-pizza/scripts/router.py draft --input repo/examples/avaliacoes_sinteticas.json --output "$RUNNER_TEMP/openrouter-preview.json" --dry-run
+      - name: Geração sintética autenticada
+        if: ${{ inputs.paid_test }}
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo "Cadastre o secret OPENROUTER_API_KEY antes do teste pago."
+            exit 1
+          fi
+          python3 repo/.github/skills/economizar-openrouter-pizza-pizza/scripts/router.py draft --input repo/examples/avaliacoes_sinteticas.json --output "$RUNNER_TEMP/openrouter-generated.json" --execute --budget-usd 0.01

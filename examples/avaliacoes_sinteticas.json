@@ -1,0 +1,26 @@
+[
+  {
+    "id": "synthetic-1",
+    "store": "Loja de teste",
+    "rating": 5,
+    "comment": "Pizza deliciosa e quentinha.",
+    "eligible": true,
+    "response": null
+  },
+  {
+    "id": "synthetic-2",
+    "store": "Loja de teste",
+    "rating": 2,
+    "comment": "Pizza chegou fria.",
+    "eligible": true,
+    "response": null
+  },
+  {
+    "id": "synthetic-3",
+    "store": "Loja de teste",
+    "rating": 1,
+    "comment": "Veio com cabelo.",
+    "eligible": true,
+    "response": null
+  }
+]
